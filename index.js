@@ -26,4 +26,8 @@ app.post("/submit", (req, res) => {
   const absPath = path.resolve("view/dataSubmit.html");
   res.sendFile(absPath);
 });
+app.use("", (req, res) => {
+  const absPath = path.resolve("view/404.html");
+  res.status(404).sendFile(absPath);
+});
 app.listen(3000);
