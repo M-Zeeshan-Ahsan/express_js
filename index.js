@@ -11,9 +11,12 @@ app.get("/", (req, res) => {
 });
 
 app.get("/about", (req, res) => {
-  res.send("About Page");
+  res.send1("About Page");
 });
-
+function errorHandler(err, req, res, next) {
+  res.status(err.status || 500).send("Something went wrong!");
+}
+app.use(errorHandler);
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
