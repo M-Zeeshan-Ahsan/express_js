@@ -1,22 +1,24 @@
 import express from "express";
+import path from "path";
 const app = express();
-function checkAgeRouteMiddleware(req, res, next) {
-  if (!req.query.age || req.query.age < 18) {
-    res.send("You are not allowed to access this page");
-  }
-  next();
-}
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  res.send("Home Page");
+  const absPath = path.resolve("view/home.html");
+  res.sendFile(absPath);
 });
 app.get("/login", (req, res) => {
-  res.send("Login Page");
+  res.send(`<form action="/submit" method="POST">
+  <input type="text" name="username" placeholder="Username" />
+  <input type="password" name="password" placeholder="Password" />
+  <button type="submit">Submit</button>
+</form>`);
 });
-app.get("/users", checkAgeRouteMiddleware, (req, res) => {
-  res.send("Users Page");
+app.post("/submit", (req, res) => {
+  console.log(req.body);
+  res.send("Submit Page");
 });
-app.get("/products", checkAgeRouteMiddleware, (req, res) => {
-  res.send("Products Page");
-});
+
 app.listen(3000);
