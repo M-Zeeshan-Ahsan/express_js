@@ -1,24 +1,19 @@
 import express from "express";
-import path from "path";
+import morgan from "morgan";
+
 const app = express();
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
+// Morgan middleware
+app.use(morgan("dev"));
 
 app.get("/", (req, res) => {
-  const absPath = path.resolve("view/home.html");
-  res.sendFile(absPath);
-});
-app.get("/login", (req, res) => {
-  res.send(`<form action="/submit" method="POST">
-  <input type="text" name="username" placeholder="Username" />
-  <input type="password" name="password" placeholder="Password" />
-  <button type="submit">Submit</button>
-</form>`);
-});
-app.post("/submit", (req, res) => {
-  console.log(req.body);
-  res.send("Submit Page");
+  res.send("Home Page");
 });
 
-app.listen(3000);
+app.get("/about", (req, res) => {
+  res.send("About Page");
+});
+
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
