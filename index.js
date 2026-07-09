@@ -1,17 +1,12 @@
 import express from "express";
-
+import userData from "./user.json" with { type: "json" };
 const app = express();
-
 app.get("/", (req, res) => {
-  const users = ["zeeshan", "ahsan"];
-  let data = `<ul>`;
-  for (let i = 0; i < users.length; i++) {
-    data += `<a href="/user/${users[i]}"><li>${users[i]}</li></a>`;
-  }
-  data += `</ul>`;
-  res.send(data);
+  res.send(userData);
 });
-app.get("/user/:name", (req, res) => {
-  res.send(`<h1>Hello ${req.params.name.toUpperCase()}</h1>`);
+app.get("/users/:id", (req, res) => {
+  const id = req.params.id;
+  let filterData = userData.filter((user) => user.id == id);
+  res.send(filterData);
 });
 app.listen(3200);
