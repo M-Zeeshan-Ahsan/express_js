@@ -1,7 +1,17 @@
 import express from "express";
-import { handleUserRequest } from "./controller/userController.js";
+
 const app = express();
-app.use(express.urlencoded({ extended: true }));
-app.set("view engine", "ejs");
-app.get("/users", handleUserRequest);
+
+app.get("/", (req, res) => {
+  const users = ["zeeshan", "ahsan"];
+  let data = `<ul>`;
+  for (let i = 0; i < users.length; i++) {
+    data += `<a href="/user/${users[i]}"><li>${users[i]}</li></a>`;
+  }
+  data += `</ul>`;
+  res.send(data);
+});
+app.get("/user/:name", (req, res) => {
+  res.send(`<h1>Hello ${req.params.name.toUpperCase()}</h1>`);
+});
 app.listen(3200);
