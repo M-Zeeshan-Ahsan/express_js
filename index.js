@@ -1,12 +1,17 @@
 import express from "express";
-import userData from "./user.json" with { type: "json" };
+import { MongoClient } from "mongodb";
 const app = express();
-app.get("/", (req, res) => {
-  res.send(userData);
-});
-app.get("/users/:id", (req, res) => {
-  const id = req.params.id;
-  let filterData = userData.filter((user) => user.id == id);
-  res.send(filterData);
-});
-app.listen(3200);
+
+const dbName = "school";
+const dbUrl = "mongodb://127.0.0.1:27017";
+const client = new MongoClient(dbUrl);
+
+async function connectToDatabase() {
+  await client.connect();
+  const db = client.db(dbName);
+  const collection = db.collection("students");
+  const result = await collection.find().toArray();
+  console.log("Connected to the database and retrieved data:", result);
+}
+connectToDatabase();
+app.listen(3000);
