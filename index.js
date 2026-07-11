@@ -29,6 +29,15 @@ client.connect().then((connection) => {
       res.send({ message: "data deleted", success: true });
     } else res.send({ message: "data not deleted", success: false });
   });
+  app.put("/update/:id", async (req, res) => {
+    const collection = db.collection("students");
+    const filter = { _id: new ObjectId(req.params.id) };
+    const update = { $set: req.body };
+    const result = await collection.updateOne(filter, update);
+    if (result) {
+      res.send({ message: "data updated", success: true });
+    } else res.send({ message: "data not updated", success: false });
+  });
 });
 
 app.listen(3000);
