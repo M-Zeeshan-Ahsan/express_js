@@ -4,10 +4,12 @@ import studentModel from "./model/studentModel.js";
 const app = express();
 app.use(express.json());
 await mongoose.connect("mongodb://127.0.0.1:27017/school").then(() => {});
+
 app.get("/", async (req, res) => {
   const studentData = await studentModel.find();
   res.send(studentData);
 });
+
 app.post("/save", async (req, res) => {
   const { name, email, age } = req.body;
   if (!req.body || !name || !age || !email) {
@@ -24,6 +26,7 @@ app.post("/save", async (req, res) => {
     storedData: saveData,
   });
 });
+
 app.put("/update/:id", async (req, res) => {
   if (!req.params.id) {
     return res.send({
@@ -44,6 +47,7 @@ app.put("/update/:id", async (req, res) => {
     updatedData: updateData,
   });
 });
+
 app.delete("/delete/:id", async (req, res) => {
   if (!req.params.id) {
     return res.send({
@@ -60,4 +64,5 @@ app.delete("/delete/:id", async (req, res) => {
     deletedData: deleteData,
   });
 });
+
 app.listen(3000);
