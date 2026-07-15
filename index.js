@@ -1,27 +1,34 @@
 import express from "express";
+import nodemailer from "nodemailer";
 const app = express();
-import session, { Session } from "express-session";
-
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
-app.use(
-  session({
-    secret: "apple",
-  }),
-);
-app.get("/", (req, res) => {
-  const sessionData = req.session.data;
-  console.log(sessionData);
-  res.render("home", { sessionData });
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "ahsansahi6@gmail.com",
+    pass: "purd vlcz hnoj czcc",
+  },
 });
 
-app.get("/login", (req, res) => {
-  res.render("login");
+app.get("/mail", (req, res) => {
+  res.render("mail");
 });
-
-app.post("/profile", (req, res) => {
-  req.session.data = req.body;
-  res.render("profile");
+app.post("/submit-email", (req, res) => {
+  console.log(req.body);
+  const mailOption = {
+    from: "ahsansahi6@gmail.com",
+    to: "zeeshanahsan8181@gmail.com",
+    subject: req.body.subject,
+    text: req.body.mail,
+  };
+  transporter.sendMail(mailOption, (error, info) => {
+    if (error) {
+      res.send("mail not send");
+    } else {
+      res.send("mail send");
+    }
+  });
 });
 
 app.listen(3200);
